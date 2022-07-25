@@ -1,0 +1,6 @@
+kubectl create -f ingress.yaml
+kubectl create -f deploy.yaml
+
+update
+-------------
+kubectl apply -f deploy.yaml

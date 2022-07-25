@@ -1,0 +1,6 @@
+kubectl apply -f docker-k8s.yaml
+
+clear
+-----------
+kubectl delete service shop-it-frontend-service
+kubectl delete deployment shop-it-frontend-deployment

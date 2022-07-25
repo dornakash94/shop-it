@@ -1,0 +1,50 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: shop-it-backend-service
+spec:
+  type: ClusterIP
+  selector:
+    app: shop-it-backend
+  ports:
+    - name: rest
+      protocol: TCP
+      port: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shop-it-backend-deployment
+  labels:
+    app: shop-it-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shop-it-backend
+  template:
+    metadata:
+      labels:
+        app: shop-it-backend
+    spec:
+      containers:
+        - name: shop-it-backend
+          image: shop-it-backend:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secrets
+                  key: USERNAME
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secrets
+                  key: PASSWORD
+            - name: MONGO_CONNECTION
+              value: mongodb://$(MONGO_INITDB_ROOT_USERNAME):$(MONGO_INITDB_ROOT_PASSWORD)@mongo:27017
+            - name: REDIS_CONNECTION
+              value: redis://default:redispw@redis:6379
+            - name: WARN
+              value: "OFF"

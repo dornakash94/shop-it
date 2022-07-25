@@ -1,0 +1,31 @@
+volumes:
+  data:
+
+services:
+  mongodb:
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=docker
+      - MONGO_INITDB_ROOT_PASSWORD=mongopw
+    volumes:
+      - data:/data/db
+  redis:
+    image: redis:latest
+    volumes:
+      - data:/data
+  shop-it-backend:
+    image: shop-it-backend:latest
+    environment:
+      - MONGO_CONNECTION=mongodb://docker:mongopw@mongodb:27017
+      - REDIS_CONNECTION=redis://default:redispw@redis:6379
+      - WARN=off
+    ports:
+      - 8080:80
+  shop-it-frontend:
+    image: shop-it-frontend:latest
+    environment:
+      - SHOP_IT_BACKEND=http://localhost:8080/v1
+    ports:
+      - 80:80
+    
+    

@@ -1,0 +1,16 @@
+create secret
+---------------
+echo -n "my-super-secret-password" | base64 //save it under secret.yaml "PASSWORD"
+
+deploy
+----------------------
+kubectl apply -f secret.yaml
+kubectl apply -f mongo-pv.yaml
+kubectl apply -f deployment.yaml
+
+clear
+------------------------
+kubectl delete secret mongo-secrets
+kubectl delete deployment,svc mongo
+kubectl delete pvc mongo-pv-claim
+kubectl delete pv mongo-pv-volume

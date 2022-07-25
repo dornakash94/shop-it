@@ -1,0 +1,10 @@
+deploy
+----------------------
+kubectl apply -f redis-pv.yaml
+kubectl apply -f deployment.yaml
+
+clear
+------------------------
+kubectl delete deployment,svc redis
+kubectl delete pvc redis-pv-claim
+kubectl delete pv redis-pv-volume
